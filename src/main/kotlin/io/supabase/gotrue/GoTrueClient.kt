@@ -161,6 +161,28 @@ open class GoTrueClient<UserResponseClass : Any, TokenResponseClass : Any>(
     }
 
     /**
+     * Updates the app metadata.
+     * This method can be used to set custom app data for example roles.
+     *
+     * @param[jwt] A valid, logged-in JWT with the role: service_role
+     * @param[userUuid] User UUID that you want to update the metadata
+     * @param[attributes] Custom app attributes you want to update
+     */
+    fun updateUserAppMetadata(jwt: String, userUuid: String, attributes: Any): UserResponseClass {
+        val response = goTrueHttpClient.put(
+            url = "/admin/users/$userUuid",
+            headers = mapOf("Authorization" to "Bearer $jwt"),
+            data = mapOf(
+                "app_metadata" to attributes
+            )
+        )
+
+        return goTrueJsonConverter.deserialize(response, goTrueUserResponseClass)
+    }
+
+
+
+    /**
      * Gets the user details.
      *
      * @param[jwt] A valid, logged-in JWT.
